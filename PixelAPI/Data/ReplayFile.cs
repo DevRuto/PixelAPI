@@ -8,6 +8,8 @@ namespace PixelAPI.Data
 {
     internal enum GlobalMode
     {
+        
+        Custom = -1,
         Vanilla = 0,
         KzSimple = 1,
         KzTimer = 2
@@ -132,7 +134,11 @@ namespace PixelAPI.Data
 
             MapName = reader.ReadSmString();
             Course = reader.ReadInt32();
-            Mode = (GlobalMode)reader.ReadInt32();
+            var mode = reader.ReadInt32();
+            if (mode > 2)
+                Mode = GlobalMode.Custom;
+            else
+                Mode = (GlobalMode)mode;
             Style = (GlobalStyle)reader.ReadInt32();
             Time = TimeSpan.FromSeconds(reader.ReadSingle());
             TeleportsUsed = reader.ReadInt32();

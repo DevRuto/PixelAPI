@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +26,26 @@ namespace PixelAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPlayers()
+        public async Task<ActionResult<ResultView>> GetPlayers([FromQuery] int offset, [FromQuery] int limit)
         {
-            var players = await _db.Players.ToListAsync();
-            return Json(_mapper.Map<List<PlayerView>>(players));
+            var query = _db.Players.AsQueryable();
+            var total = await query.CountAsync();
+
+            if (offset > 0)
+                query = query.Skip(offset);
+            if (limit > 0)
+                query = query.Take(limit);
+
+            var players  = await query.ToListAsync();
+
+            var result = new ResultView
+            {
+                Offset = 0,
+                Count = players.Count,
+                Total = total,
+                Data = _mapper.Map<List<PlayerView>>(players)
+            };
+            return result;
         }
     }
 }
