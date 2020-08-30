@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using PixelAPI.Data;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
 namespace PixelAPI
@@ -29,6 +32,14 @@ namespace PixelAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<PixelContext>(options =>
+                options.UseMySql(
+                    Configuration.GetConnectionString("PixelContext"),
+                    mysqlOptions =>
+                    {
+                        mysqlOptions.ServerVersion(new Version(8, 0), ServerType.MySql);
+                    }));
+
             services.AddControllers();
 
             services.AddCors(options =>
@@ -58,6 +69,12 @@ namespace PixelAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<PixelContext>();
+                context.Database.EnsureCreated();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
