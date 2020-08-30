@@ -49,7 +49,7 @@ namespace PixelAPI.Controllers
             return Json(new
             {
                 success = id.HasValue,
-                id = id.Value
+                id = id.HasValue ? id.Value : -1
             });
         }
 

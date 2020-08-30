@@ -7,6 +7,8 @@
 ### Sourcemod plugin
 https://github.com/DevRuto/PixelAPI-SM
 
+### * [DOCS](./DOC.md)
+
 ## TODO
 - [x] Queries
 - [ ] Docker
