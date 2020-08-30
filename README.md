@@ -4,6 +4,9 @@
 
 > An ASP.Net Core project intended to save and serve GOKZ replays (CSGO KZ Speedrun Mod)
 
-# TODO
-- [ ] Query Records
+
+
+## TODO
+- [x] Queries
+- [ ] Docker
 - [ ] Tests
