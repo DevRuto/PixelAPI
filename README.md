@@ -4,7 +4,8 @@
 
 > An ASP.Net Core project intended to save and serve GOKZ replays (CSGO KZ Speedrun Mod)
 
-
+### Sourcemod plugin
+https://github.com/DevRuto/PixelAPI-SM
 
 ## TODO
 - [x] Queries
