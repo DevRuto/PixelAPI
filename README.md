@@ -26,6 +26,9 @@
 ### Sourcemod plugin
 https://github.com/DevRuto/PixelAPI-SM
 
+### Web Interface (WIP)
+https://github.com/DevRuto/PixelApp
+
 ### * [DOCS](./DOC.md)
 
 ## TODO
