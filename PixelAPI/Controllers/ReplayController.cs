@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PixelAPI.Data;
 using PixelAPI.Models;
@@ -43,8 +46,10 @@ namespace PixelAPI.Controllers
             // if (Request.Headers["X-Api-Key"] != "Kurisu")
             //     return Unauthorized();
 
+            int serverId = await ProcessServer(Request);
+
             // Request.Body
-            long? id = await SaveReplay(Request.Body);
+            long? id = await SaveReplay(Request.Body, serverId);
 
             return Json(new
             {
@@ -53,7 +58,26 @@ namespace PixelAPI.Controllers
             });
         }
 
-        private async Task<long?> SaveReplay(Stream requestBody)
+        private async Task<int> ProcessServer(HttpRequest request)
+        {
+            var ip = request.Headers["server-ip"].ToString();
+            var serverName = request.Headers["server-name"].ToString();
+            var server = await _db.Servers.Where(server => server.Name.ToLower() == serverName.ToLower()).FirstOrDefaultAsync();
+            if (server == null)
+            {
+                server = new Server
+                {
+                    Name = serverName,
+                    Ip = ip
+                };
+                await _db.AddAsync(server);
+                _logger.LogInformation("Added server {serverName} (ip)", serverName, ip);
+            }
+
+            return server.Id;
+        }
+
+        private async Task<long?> SaveReplay(Stream requestBody, int serverId)
         {
             try
             {
@@ -104,7 +128,8 @@ namespace PixelAPI.Controllers
                     Course = replayFile.Course,
                     Style = (int) replayFile.Style,
                     Time = (long) Math.Floor(replayFile.Time.TotalMilliseconds),
-                    Teleports = replayFile.TeleportsUsed
+                    Teleports = replayFile.TeleportsUsed,
+                    ServerId = serverId
                 };
                 await _db.AddAsync(record);
                 await _db.SaveChangesAsync();

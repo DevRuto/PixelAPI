@@ -15,6 +15,9 @@ namespace PixelAPI.ViewModels
         public int Time { get; set; }
         public int Teleports { get; set; }
         public DateTime Created { get; set; }
+
+        public int ServerId { get; set; }
+        public string ServerName { get; set; }
     }
 
 }

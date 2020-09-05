@@ -20,6 +20,8 @@ namespace PixelAPI.Models
         public int Style { get; set; }
         public long Time { get; set; }
         public int Teleports { get; set; }
+
+        public int ServerId { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("MapName")]
@@ -28,5 +30,7 @@ namespace PixelAPI.Models
         [ForeignKey("SteamID64")]
         public Player Player { get; set; }
 
+        [ForeignKey("ServerId")]
+        public Server Server { get; set; }
     }
 }
