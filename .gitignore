@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/aspnetcore
-# Edit at https://www.toptal.com/developers/gitignore?templates=aspnetcore
+# Created by https://www.toptal.com/developers/gitignore/api/aspnetcore,code
+# Edit at https://www.toptal.com/developers/gitignore?templates=aspnetcore,code
 
 ### ASPNETCore ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -272,4 +272,12 @@ __pycache__/
 # Cake - Uncomment if you are using it
 # tools/
 
-# End of https://www.toptal.com/developers/gitignore/api/aspnetcore
+### Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/aspnetcore,code
