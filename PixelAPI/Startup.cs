@@ -4,6 +4,7 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,12 @@ namespace PixelAPI
                     {
                         mysqlOptions.ServerVersion(new Version(8, 0), ServerType.MySql);
                     }));
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
 
             services.AddAutoMapper(typeof(MapperProfile));
 
@@ -71,11 +78,14 @@ namespace PixelAPI
                 var context = serviceScope.ServiceProvider.GetRequiredService<PixelContext>();
                 context.Database.EnsureCreated();
             }
+            
+            app.UseForwardedHeaders();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
