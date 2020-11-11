@@ -10,5 +10,6 @@ namespace PixelAPI.Models
         public string Name { get; set; }
 
         public string Ip { get; set; }
+        public short Port { get; set; }
     }
 }

@@ -60,9 +60,10 @@ namespace PixelAPI.Controllers
 
         private async Task<int> ProcessServer(HttpRequest request)
         {
+            short.TryParse(request.Headers["server-port"].ToString(), out short port);
             var ip = request.Headers["server-ip"].ToString();
             var serverName = request.Headers["server-name"].ToString();
-            var server = await _db.Servers.Where(server => server.Name.ToLower() == serverName.ToLower()).FirstOrDefaultAsync();
+            var server = await _db.Servers.Where(server => server.Ip == ip && server.Port == port).FirstOrDefaultAsync();
             if (server == null)
             {
                 server = new Server

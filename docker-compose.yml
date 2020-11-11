@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  api:
+    depends_on:
+      - mysqldb
+    build:
+      context: .
+    ports:
+      - 5000:80
+
+  mysqldb:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: asdf
+      MYSQL_DATABASE: pixel
+      MYSQL_USER: pixel
+      MYSQL_PASSWORD: docker
